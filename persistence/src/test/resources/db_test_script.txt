@@ -1,0 +1,46 @@
+use mct_test;
+
+drop table disciplines;
+drop table mct_users;
+drop table mine;
+drop table telemetry_components;
+
+create table disciplines(discipline_id varchar(50) KEY, description varchar(500), program varchar(20), obj_version int default '0');
+create table mct_users(user_id varchar(20) KEY, firstname varchar(50), lastname varchar(50), discipline_id varchar(50), obj_version int default '0', foreign key(discipline_id) references disciplines(discipline_id));
+create table mine(user_id varchar(20), component_id varchar(20), obj_version int default '0',  foreign key(user_id) references mct_users(user_id), foreign key(component_id) references components(component_id));
+create index mine_index on mine(user_id(20), component_id(20));
+create table telemetry_components(component_id varchar(20) KEY, component_name varchar(50), parent_component_id varchar(20), component_type varchar(100), obj_version int default '0', foreign key(parent_component_id) references components(component_id));
+
+insert into disciplines (discipline_id, description) values ("ACO", "Assembly and Checkout Officer");
+insert into disciplines (discipline_id, description) values ("ADCO", "Attitude Determination and Control Officer");
+insert into disciplines (discipline_id, description) values ("ATLAS", "PHALCON, THOR and ECLSS combined");
+insert into disciplines (discipline_id, description) values ("CAPCOM", "Capsule Communicator");
+insert into disciplines (discipline_id, description) values ("CATO", "Communication and Tracking Officer");
+insert into disciplines (discipline_id, description) values ("ECLSS", "Environmental Control and Life Support System");
+insert into disciplines (discipline_id, description) values ("EVA", "Extravehicular Activity Officer");
+insert into disciplines (discipline_id, description) values ("FLIGHT", "Flight Director");
+insert into disciplines (discipline_id, description) values ("ODIN", "Onboard, Data, Interfaces and Networks");
+insert into disciplines (discipline_id, description) values ("OPSPLAN", "Operations Planner");
+insert into disciplines (discipline_id, description) values ("OSO", "Operations Support Officer");
+insert into disciplines (discipline_id, description) values ("PAO", "Public Affairs Officer ");
+insert into disciplines (discipline_id, description) values ("PHALCON", "Power, Heating, Articulation, Lighting Control Officer");
+insert into disciplines (discipline_id, description) values ("RIO", "Remote Integration Officer");
+insert into disciplines (discipline_id, description) values ("ROBO", "Robotics Operations Systems Officer");
+insert into disciplines (discipline_id, description) values ("SURGEON", "Flight Surgeon");
+insert into disciplines (discipline_id, description) values ("THOR", "Thermal Operations and Resources");
+insert into disciplines (discipline_id, description) values ("TITAN", "ADCO, ODIN and CATO combined");
+insert into disciplines (discipline_id, description) values ("VVO", "Visiting Vehicle Officer");
+
+insert into mct_users(user_id, firstname, lastname, discipline_id) values ('alTomotsugu', 'Alan', 'Tomotsugu', 'ACO');
+insert into mct_users(user_id, firstname, lastname, discipline_id) values ('amy', 'Amy', 'Amy', 'ACO');
+insert into mct_users(user_id, firstname, lastname, discipline_id) values ('asi', 'asi', 'asi', 'CATO');
+insert into telemetry_components(component_id, component_name, parent_component_id, component_type) values ('1', 'Group A', null, 'gov.nasa.arc.mct.components.telemetry.TelemetryGroupComponent');
+insert into telemetry_components(component_id, component_name, parent_component_id, component_type) values ('2', 'Group B', '1', 'gov.nasa.arc.mct.components.telemetry.TelemetryGroupComponent');
+insert into telemetry_components(component_id, component_name, parent_component_id, component_type) values ('3', 'Group C', '1', 'gov.nasa.arc.mct.components.telemetry.TelemetryGroupComponent');
+insert into telemetry_components(component_id, component_name, parent_component_id, component_type) values ('4', 'Group D', '2', 'gov.nasa.arc.mct.components.telemetry.TelemetryGroupComponent');
+insert into telemetry_components(component_id, component_name, parent_component_id, component_type) values ('5', 'Group D', null, 'gov.nasa.arc.mct.components.telemetry.TelemetryGroupComponent');
+
+insert into mine(user_id, component_id) values ('alTomotsugu', '1');
+insert into mine(user_id, component_id) values ('alTomotsugu', '5');
+
+commit;

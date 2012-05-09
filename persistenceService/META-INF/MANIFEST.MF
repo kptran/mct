@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: persistenceService
+Bundle-SymbolicName: persistenceService
+Bundle-Version: 1.1.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Fragment-Host: system.bundle
+Export-Package: gov.nasa.arc.mct.dao.specifications;version="1.1.0"

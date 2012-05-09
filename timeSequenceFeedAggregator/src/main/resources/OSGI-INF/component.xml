@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<scr:component name="gov.nasa.arc.mct.feed.DataProviderAccess" >
+		<implementation class="gov.nasa.arc.mct.feed.FeedAggregatorService"/>
+		<service>
+			<provide interface="gov.nasa.arc.mct.api.feed.FeedDataArchive"/>
+			<provide interface="gov.nasa.arc.mct.api.feed.FeedAggregator"/>
+		</service>
+		<reference name="dataProviderAccess"
+			interface="gov.nasa.arc.mct.api.feed.DataProvider"
+			bind="addDataProvider"
+			unbind="removeDataProvider"
+			cardinality="0..n"
+			policy="dynamic"/>
+	</scr:component>
+</root>

@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Evaluator Component
+Bundle-SymbolicName: evaluatorComponent
+Bundle-Version: 1.1.0
+Import-Package: 
+ gov.nasa.arc.mct.api.feed;version="1.1.0",
+ gov.nasa.arc.mct.components;version="1.1.0",
+ gov.nasa.arc.mct.gui;version="1.1.0",
+ gov.nasa.arc.mct.lock.manager;version="1.1.0",
+ gov.nasa.arc.mct.platform.spi;version="1.1.0",
+ gov.nasa.arc.mct.services.activity;version="1.1.0",
+ gov.nasa.arc.mct.policy;version="1.1.0",
+ gov.nasa.arc.mct.roles;version="1.1.0",
+ gov.nasa.arc.mct.roles.events;version="1.1.0",
+ gov.nasa.arc.mct.services.adapter;version="1.1.0",
+ gov.nasa.arc.mct.services.component;version="1.1.0",
+ gov.nasa.arc.mct.services.internal.component;version="1.1.0",
+ gov.nasa.arc.mct.util;version="1.1.0",
+ org.osgi.framework;version="1.4",
+ org.osgi.service.cm;version="1.2",
+ org.osgi.service.event;version="1.2",
+ org.slf4j;version="1.5.0"
+Service-Component: OSGI-INF/services.xml
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: gov.nasa.arc.mct.evaluator.api;version="1.1.0",
+ gov.nasa.arc.mct.evaluator.spi;version="1.1.0"

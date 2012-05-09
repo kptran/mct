@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="gov.nasa.arc.mct.collection.CollectionComponentProvider" immediate="true">
+	<implementation class="gov.nasa.arc.mct.collection.CollectionComponentProvider"/>
+	<service>
+		<provide interface="gov.nasa.arc.mct.services.component.ComponentProvider"/>
+	</service>
+</component>

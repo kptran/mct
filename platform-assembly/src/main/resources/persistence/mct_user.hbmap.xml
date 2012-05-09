@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+
+  <class name="gov.nasa.arc.mct.dao.specifications.MCTUser" table="mct_users" lazy="true">
+    <!--  <cache usage="transactional"/> -->
+    <id name="userId" column="user_id" type="java.lang.String" />
+    <version name="version" access="field" column="obj_version"/>
+    <property name="firstName" column="firstname" type="java.lang.String"/>
+    <property name="lastName" column="lastname" type="java.lang.String"/>
+    <many-to-one name="discipline" class="gov.nasa.arc.mct.dao.specifications.Discipline" column="discipline_id" cascade="save-update" lazy="false"/>
+  </class>
+</hibernate-mapping>
+ 

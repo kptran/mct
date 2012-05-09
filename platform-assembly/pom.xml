@@ -1,0 +1,556 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>gov.nasa.arc.mct</groupId>
+  <artifactId>mct-generic-platform-trunk</artifactId>
+  <packaging>pom</packaging>
+  <name>MCT Generic Platform Trunk Packaging</name>
+  <version>1.1.0</version>
+  <parent>
+  	<artifactId>mct-superpom</artifactId>
+  	<groupId>mct</groupId>
+  	<version>2.0.0</version>
+  	<relativePath>../superpom</relativePath>
+  </parent>
+  <build>
+  	<extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-ssh-external</artifactId>
+         <version>1.0-beta-2</version>
+      </extension>
+    </extensions>
+  	<plugins>
+ 		 <plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-assembly-plugin</artifactId>
+  			<version>2.2-beta-5</version>
+  			<executions>
+           	 	<execution>
+	            	<id>dist</id>
+						<phase>package</phase>
+	            	<goals>
+	              		<goal>single</goal>
+	            	</goals>
+	            	<configuration>
+		              	<descriptors>
+		                	<descriptor>src/dist.xml</descriptor>
+		              	</descriptors>
+					</configuration>
+				</execution>
+         	 	<execution>
+         	 		<id>all-dependencies</id>
+         	 		<phase>package</phase>
+         	 		<goals>
+         	 			<goal>single</goal>
+         	 		</goals>
+		           	<configuration>
+		           		<finalName>all-dependencies/dependencies</finalName>
+		           		<appendAssemblyId>false</appendAssemblyId>
+		              	<descriptors>
+		                	<descriptor>src/all-dependencies.xml</descriptor>
+		              	</descriptors>
+					</configuration>
+         	 	</execution>
+			</executions>
+		</plugin>
+		
+		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-antrun-plugin</artifactId>
+  			<version>1.3</version>
+  			<executions>
+   				<execution>
+  					<id>create-version</id>
+  					<phase>compile</phase>
+  					<configuration>
+  						<tasks>
+							<ant antfile="src/build.xml"
+							    dir="."
+							    inheritAll="false">
+								<property name="project.build.directory" location="${project.build.directory}" />
+								<property name="buildNumber" value="${buildNumber}" />
+							</ant>
+  						</tasks>
+  					</configuration>
+  					<goals>
+  						<goal>run</goal>
+  					</goals>
+  				</execution>
+  			</executions>
+  		</plugin>
+		
+  	</plugins>
+  </build>
+  <profiles>
+  	<profile>
+  		<id>eclipse</id>
+  		<activation>
+  			<property>
+  				<name>eclipse</name>
+  				<value>true</value>
+  			</property>
+  		</activation>
+  		<build>
+  			<plugins>
+  				<plugin>
+		  			<groupId>org.apache.maven.plugins</groupId>
+		  			<artifactId>maven-antrun-plugin</artifactId>
+		  			<version>1.3</version>
+		  			<executions>
+		  				<execution>
+			  				<id>eclipse-setup</id>
+			  				<phase>verify</phase>
+			  				<goals>
+			  					<goal>run</goal>
+			  				</goals>
+			  				<configuration>
+			  					<tasks>
+			  						<delete dir="${project.build.directory}/eclipse.dir" quiet="true" />
+			  						<mkdir dir="${project.build.directory}/eclipse.dir" />
+			  						<untar
+			  							src="${project.build.directory}/${project.artifactId}-${project.version}-dist.tar.gz"
+			  							dest="${project.build.directory}/eclipse.dir"
+			  							compression="gzip">
+			  							<patternset>
+			  								<include name="**/resources/**" />
+			  							</patternset>
+		  								<mapper type="glob" from="${project.artifactId}-${project.version}/*" to="*" />
+			  						</untar>
+			  						<mkdir dir="${project.build.directory}/eclipse.dir/lib" />
+			  						<copy todir="${project.build.directory}/eclipse.dir/lib">
+			  							<fileset dir="${project.build.directory}/all-dependencies">
+			  								<include name="*.jar" />
+			  							</fileset>
+			  						</copy>
+			  					</tasks>
+			  				</configuration>
+		  				</execution>
+		  			</executions>
+  				</plugin>
+  						
+  			</plugins>
+  		</build>
+  	</profile>
+  	<profile>
+  		<id>distribution</id>
+  		<activation>
+  			<property>
+  				<name>distribution</name>
+  				<value>true</value>
+  			</property>
+  		</activation>
+  		<build>
+  			<plugins>	
+  				<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-antrun-plugin</artifactId>
+  			<version>1.3</version>
+  			<executions>
+  				<execution>
+  					<id>javadoc-published</id>
+  					<phase>verify</phase>
+  					<goals>
+  						<goal>run</goal>
+  					</goals>
+  					<configuration>
+						<tasks>
+						   <!-- Change MCT API version number here -->
+							<property name="mct.api.version" value="&lt;B&gt;Version: 1.1.0&lt;/B&gt;" />
+							
+							<!-- Copy selected files from the aggregated sources. -->
+							<delete dir="${project.build.directory}/published-api" quiet="true" />
+							<mkdir dir="${project.build.directory}/published-api/src" />
+							<unjar
+								src="target/${project.artifactId}-${project.version}-sources.jar"
+								dest="${project.build.directory}/published-api/src">
+								<patternset>
+								
+									<!-- mctcore -->
+									<include name="gov/nasa/arc/mct/api/*.java" />
+									<include name="gov/nasa/arc/mct/api/feed/*.java" />
+									<include name="gov/nasa/arc/mct/components/*.java" />
+									<include name="gov/nasa/arc/mct/components/collection/*.java" />
+									<include name="gov/nasa/arc/mct/components/util/*.java" />
+									<include name="gov/nasa/arc/mct/connection/*.java" />
+									<include name="gov/nasa/arc/mct/context/*.java" />
+									<include name="gov/nasa/arc/mct/gui/*.java" />
+									<include name="gov/nasa/arc/mct/gui/util/*.java" />
+									<include name="gov/nasa/arc/mct/identitymgr/*.java" />
+									<include name="gov/nasa/arc/mct/loader/*.java" />
+									<include name="gov/nasa/arc/mct/lock/manager/*.java" />
+									<include name="gov/nasa/arc/mct/policy/*.java" />
+									<include name="gov/nasa/arc/mct/profile/*.java" />
+									<include name="gov/nasa/arc/mct/registry/*.java" />
+									<include name="gov/nasa/arc/mct/roles/*.java" />
+									<include name="gov/nasa/arc/mct/roles/events/*.java" />
+									<include name="gov/nasa/arc/mct/services/*.java" />
+									<include name="gov/nasa/arc/mct/services/activity/*.java" />
+									<include name="gov/nasa/arc/mct/services/adapter/*.java" />
+									<include name="gov/nasa/arc/mct/services/policy/*.java" />
+									<include name="gov/nasa/arc/mct/services/component/*.java" />
+									<include name="gov/nasa/arc/mct/services/internal/component/*.java" />
+									<include name="gov/nasa/arc/mct/services/internal/component/impl/*.java" />
+									<include name="gov/nasa/arc/mct/services/serviceLocator/*.java" />
+									
+									<!-- platform -->
+									<include name="gov/nasa/arc/mct/lock/*.java" />
+									<include name="gov/nasa/arc/mct/lock/exception/*.java" />
+									
+									<!-- persistenceService -->
+									<include name="gov/nasa/arc/mct/dao/specifications/*.java" />
+									<include name="gov/nasa/arc/mct/dao/persistence/strategy/*.java" />
+									<include name="gov/nasa/arc/mct/dao/service/*.java" />
+									<include name="gov/nasa/arc/mct/services/internal/persistence/*.java" />
+									<include name="gov/nasa/arc/mct/services/internal/persistence/impl/*.java" />
+		
+									<!-- util -->
+									<include name="gov/nasa/arc/mct/util/*.java" />
+									<include name="gov/nasa/arc/mct/util/internal/*.java" />
+									<include name="gov/nasa/arc/mct/util/ext/commands/*.java" />
+		
+									<!-- collectionComponent -->
+									<include name="gov/nasa/arc/mct/collection/*.java" />
+									<include name="gov/nasa/arc/mct/collection/access/*.java" />
+		
+									<!-- tableViews -->
+									<include name="gov/nasa/arc/mct/abbreviation/*.java" />
+									<include name="gov/nasa/arc/mct/table/model/*.java" />
+									<include name="gov/nasa/arc/mct/table/utils/*.java" />
+																		
+									<!-- evaluatorComponent -->
+									<include name="gov/nasa/arc/mct/evaluator/api/*.java" />
+									<include name="gov/nasa/arc/mct/evaluator/enums/*.java" />
+									<include name="gov/nasa/arc/mct/evaluator/expressions/*.java" />
+		
+								</patternset>
+							</unjar>
+							<!-- Generate Javadoc from the selected sources. -->
+							<record name="${project.build.directory}/published-api/javadoc-log.txt"
+							    action="start"
+							    emacsmode="true" />
+							<javadoc
+							    destdir="${project.build.directory}/published-api/apidocs"
+								maxmemory="512m"
+								access="protected"
+								encoding="ISO-8859-1"
+								docencoding="UTF-8"
+								additionalparam="-quiet"
+								source="1.6"
+								linksource="no"
+								breakiterator="yes"
+								sourcepath="${project.build.directory}/published-api/src"
+								author="no"
+								header="${mct.api.version}">
+								<classpath>
+									<fileset dir="${project.build.directory}/all-dependencies">
+										<include name="*.jar" />
+									</fileset>
+								</classpath>
+							</javadoc>
+							<record name="${project.build.directory}/published-api/javadoc-log.txt"
+							    action="stop" />
+							
+							<!-- Check whether there were any Javadoc warnings only, and fail if so. -->
+							<condition property="api.javadoc.warnings" value="true" >
+								<resourcecontains resource="${project.build.directory}/published-api/javadoc-log.txt"
+								    substring="warning"
+								    casesensitive="false" />
+							</condition>
+							<fail if="api.javadoc.warnings"
+							    message="Javadoc warnings in published API. See ${project.build.directory}/published-api/javadoc-log.txt for details." />
+													
+							<!-- Now ZIP up the result as a build artifact. -->
+							<zip destfile="${project.build.directory}/${project.artifactId}-${project.version}-apidocs.zip"
+							     basedir="${project.build.directory}/published-api"
+							     includes="apidocs/" />
+							<!-- Add checkstyle images and CSS to checkstyle output dirs -->
+							<mkdir dir="${project.build.directory}/published-api/checkstyle" />
+							<copy todir="${project.build.directory}/published-api/checkstyle">
+								<fileset dir="src">
+									<include name="images/*" />
+									<include name="css/*" />
+								</fileset>
+							</copy>
+							
+							<!-- Replacing UTC time PUIs with placeholder in services.xml -->
+  							<delete dir="${project.build.directory}/tmp.dir" quiet="true" />
+  							<mkdir dir="${project.build.directory}/tmp.dir" />
+  							<untar
+			  					src="${project.build.directory}/${project.artifactId}-${project.version}-dist.tar.gz"
+			  					dest="${project.build.directory}/tmp.dir"
+			  					compression="gzip"/>
+			  			
+							
+							<property name="file.permission" value="755" />
+							<chmod dir="${project.build.directory}/tmp.dir/${project.artifactId}-${project.version}" perm="${file.permission}" includes="**/**"/>
+							
+							<echo message="Building tarball distribution file..." />
+							<tar longfile="gnu"
+								destfile="${project.build.directory}/${project.artifactId}-${project.version}-dist.tar.gz" 
+								compression="gzip">
+								
+								<tarfileset dir="${project.build.directory}/tmp.dir/" filemode="${file.permission}" dirmode="${file.permission}">
+									<include name="${project.artifactId}-${project.version}/**" />
+								</tarfileset>
+							</tar>	
+						</tasks>
+  					</configuration>
+  				</execution>
+  			</executions>
+  			</plugin>
+  			
+  			<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-checkstyle-plugin</artifactId>
+  			<version>2.4</version>
+  			<executions>
+  				<execution>
+  					<id>published-api-checks</id>
+  					<phase>verify</phase>
+  					<goals>
+  						<goal>checkstyle</goal>
+  					</goals>
+  					<configuration>
+						<outputDirectory>${project.build.directory}/published-api/checkstyle</outputDirectory>
+						<sourceDirectory>${project.build.directory}/published-api/src</sourceDirectory>
+						<outputFile>${project.build.directory}/published-api/checkstyle-output.xml</outputFile>
+						<cacheFile>${project.build.directory}/published-api/checkstyle-cachefile</cacheFile>
+						<configLocation>src/checkstyle-javadoc.xml</configLocation>
+						<encoding>ISO-8859-1</encoding>
+						<failsOnError>true</failsOnError>
+						<consoleOutput>true</consoleOutput>
+						<linkXRef>false</linkXRef>
+  					</configuration>
+  				</execution>
+  			</executions>
+  		</plugin>
+  				
+  			</plugins>
+  		</build>
+  		
+  		<dependencies>
+		  	<dependency>
+		  		<groupId>gov.nasa.arc.mct.toolkit</groupId>
+		  		<artifactId>mct-toolkit</artifactId>
+		  		<version>1.1.0</version>
+		  	</dependency>  
+		  	<dependency>
+		  		<groupId>org.acme.example</groupId>
+		  		<artifactId>exampleplugin</artifactId>
+		  		<version>1.1.0</version>
+		  		<classifier>eclipse</classifier>
+		  	</dependency>
+		  	<dependency>
+		  		<groupId>gov.nasa.arc.mct.toolkit</groupId>
+		  		<artifactId>mct-launch</artifactId>
+		  		<version>1.1.0</version>
+		  		<classifier>eclipse</classifier>
+		  	</dependency>
+		  	<dependency>
+		  		<groupId>gov.nasa.arc.mct.toolkit</groupId>
+		  		<artifactId>plugin-template</artifactId>
+		  		<version>1.1.0</version>
+		  		<classifier>eclipse</classifier>
+		  	</dependency>
+		 	<dependency>
+		  		<groupId>mct</groupId>
+		  		<artifactId>mct-superpom</artifactId>
+		  		<version>2.0.0</version>
+		  		<classifier>sources</classifier>
+		  	</dependency>
+		  	<dependency>
+		  		<groupId>gov.nasa.arc.mct.toolkit</groupId>
+		  		<artifactId>mct-toolkit</artifactId>
+		  		<version>1.1.0</version>
+		  		<classifier>apidocs</classifier>
+		  	</dependency>
+  		</dependencies>
+  	</profile>
+  </profiles>
+  <modules>
+        <module>../util</module>  
+        <module>../mctcore</module>
+        <module>../persistence</module>
+        <module>../persistenceService</module>
+        <module>../collectionComponent</module>
+        <module>../platform</module>
+        <module>../tests</module>
+        <module>../systemExports</module>
+        <module>../serviceConfigurator</module>
+        <module>../mctCoreTaxonomyProvider</module>
+        <module>../mctLastBundleMarker</module>
+        <module>../timeSequenceFeedAggregator</module>
+        <module>../exampleplugin</module>        
+        <module>../subscriptionManager</module>
+        <module>../tableViews</module>
+        <module>../canvas</module>
+        <module>../evaluatorComponent</module>
+        <module>../batik</module>
+		<module>../dynamicGraphics</module>
+		<module>../executableButtons</module>
+		<module>../limits</module>
+        <module>../sleepycat</module>
+        <module>../fastPlotViews</module>
+		<module>../Plotter</module>
+  </modules>
+  <dependencies>
+    <dependency>
+  		<groupId>gov.nasa.arc.mct</groupId>
+  		<artifactId>platform</artifactId>
+  		<version>1.1.0</version>
+  	</dependency>
+  	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-c3p0</artifactId>
+		<version>3.3.1.GA</version>
+	</dependency>
+	<dependency>
+  		<groupId>c3p0</groupId>
+  		<artifactId>c3p0</artifactId>
+  		<version>0.9.1.2</version>
+  	</dependency>
+  	  	<dependency>
+  		<groupId>gov.nasa.arc.mct</groupId>
+  		<artifactId>mctCoreTaxonomyProvider</artifactId>
+  		<version>1.1.0</version>
+  		<scope>runtime</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nasa.arc.mct</groupId>
+  		<artifactId>timeSequenceFeedAggregator</artifactId>
+  		<version>1.1.0</version>
+  		<scope>runtime</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nasa.arc.mct</groupId>
+  		<artifactId>subscriptionManager</artifactId>
+  		<version>1.1.0</version>
+  		<scope>runtime</scope>
+  	</dependency>
+  	<dependency>
+		<groupId>org.apache.felix</groupId>
+		<artifactId>org.apache.felix.framework</artifactId>
+		<version>4.0.2</version>
+		<scope>runtime</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.felix</groupId>
+		<artifactId>org.osgi.compendium</artifactId>
+		<version>1.4.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.felix</groupId>
+		<artifactId>org.apache.felix.scr</artifactId>
+		<version>1.6.0</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.felix</groupId>
+		<artifactId>org.apache.felix.log</artifactId>
+		<version>1.0.1</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.felix</groupId>
+		<artifactId>org.apache.felix.configadmin</artifactId>
+		<version>1.2.8</version>
+	</dependency>
+	  	<dependency>
+  		<groupId>gov.nasa.arc.mct</groupId>
+  		<artifactId>systemExports</artifactId>
+  		<version>1.1.0</version>
+  		<scope>runtime</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nasa.arc.mct</groupId>
+  		<artifactId>serviceConfigurator</artifactId>
+  		<version>1.1.0</version>
+  		<scope>runtime</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>gov.nasa.arc.mct</groupId>
+  		<artifactId>mctLastBundleMarker</artifactId>
+  		<version>1.1.0</version>
+  		<scope>runtime</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.testng</groupId>
+  		<artifactId>testng</artifactId>
+  		<version>5.8</version>
+  		<classifier>jdk15</classifier>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.mockito</groupId>
+  		<artifactId>mockito-all</artifactId>
+  		<version>1.7</version>
+  		<scope>test</scope>
+  	</dependency>
+  	  	<dependency>
+  		<groupId>org.acme.example</groupId>
+  		<artifactId>exampleplugin</artifactId>
+  		<version>1.1.0</version>
+  		<scope>runtime</scope>
+  	</dependency>
+	<dependency>
+		<groupId>gov.nasa.arc.mct.collection</groupId>
+		<artifactId>collectionComponent</artifactId>
+		<version>1.1.0</version>
+	</dependency>
+	<dependency>
+	 	<groupId>gov.nasa.arc.mct</groupId>
+	 	<artifactId>tableViews</artifactId>
+	 	<version>1.1.0</version>
+	 </dependency>
+	 <dependency>
+	 	<groupId>gov.nasa.arc.mct</groupId>
+	 	<artifactId>canvasView</artifactId>
+	 	<version>1.1.0</version>
+	 </dependency>
+	 <dependency>
+	 	<groupId>gov.nasa.arc.mct</groupId>
+	 	<artifactId>evaluatorComponent</artifactId>
+	 	<version>1.1.0</version>
+	 </dependency>
+	  <dependency>
+		<groupId>gov.nasa.arc.mct</groupId>
+	 	<artifactId>sleepycat</artifactId>
+	 	<version>1.1.0</version>
+	 </dependency>	 
+	  <dependency>
+		<groupId>gov.nasa.arc.mct</groupId>
+	 	<artifactId>fastPlotViews</artifactId>
+	 	<version>1.1.0</version>
+	 </dependency>
+	 <dependency>
+		<groupId>plotter</groupId>
+	 	<artifactId>plotter</artifactId>
+	 	<version>1.1.0</version>
+	 </dependency>
+	 <dependency>
+	 	<groupId>gov.nasa.arc.mct</groupId>
+	 	<artifactId>batikWrapper</artifactId>
+	 	<version>1.6</version>
+	 </dependency>
+	 <dependency>
+		<groupId>gov.nasa.arc.mct</groupId>
+	 	<artifactId>graphicalViews</artifactId>
+	 	<version>1.1.0</version>
+	 </dependency>  
+	 <dependency>
+		<groupId>gov.nasa.arc.mct</groupId>
+	 	<artifactId>limits</artifactId>
+	 	<version>1.1.0</version>
+	 </dependency>  
+	 <dependency>
+		<groupId>gov.nasa.jsc.mct</groupId>
+	 	<artifactId>executableButtons</artifactId>
+	 	<version>1.1.0</version>
+	 </dependency>     
+	 
+	 <!-- Includes Apache ANT version 1.7.1 as part of FOSS approval process --> 
+	 <dependency>
+    	<groupId>org.apache.ant</groupId>
+    	<artifactId>ant</artifactId>
+    	<version>1.7.1</version>
+	</dependency>
+  </dependencies>
+</project>

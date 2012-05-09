@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="gov.nasa.arc.mct.collection.access.PolicyManagerAccess">
+   <implementation class="gov.nasa.arc.mct.collection.access.PolicyManagerAccess"/>
+   <reference 
+        name="gov.nasa.arc.mct.collection.PolicyManager" 
+        bind="setPolicyManager" 
+        cardinality="1..1" 
+        interface="gov.nasa.arc.mct.services.component.PolicyManager" 
+        policy="static" 
+        unbind="releasePolicyManager"/>
+</component>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/main/resources/persistence"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry excluding="persistence/" kind="src" path="src/test/resources"/>
+	<classpathentry excluding="persistence/" kind="src" path="src/main/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/persistence"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/mctcore"/>
+	<classpathentry kind="var" path="M2_REPO/org/hibernate/hibernate-core/3.3.1.GA/hibernate-core-3.3.1.GA.jar" sourcepath="/HIB_SRC"/>
+	<classpathentry kind="var" path="M2_REPO/org/testng/testng/5.8/testng-5.8-jdk15.jar"/>
+	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14.jar"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="var" path="M2_REPO/org/mockito/mockito-all/1.8.2/mockito-all-1.8.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/tests"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

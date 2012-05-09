@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SubscriptionManager
+Bundle-SymbolicName: subscriptionManager
+Bundle-Version: 1.1.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Activator: gov.nasa.arc.mct.subscribe.Activator
+Export-Package: gov.nasa.arc.mct.event.services;version="1.1.0"
+Import-Package: gov.nasa.arc.mct.platform.spi;version="1.1.0",
+ org.osgi.framework;version="1.5.0",
+ org.osgi.service.event;version="1.2.0",
+ org.osgi.service.cm;version="1.2",
+ org.osgi.service.component;version="1.1.0",
+ org.osgi.service.log;version="1.3.0",
+ org.slf4j;version="1.5.0"
+Service-Component: OSGI-INF/SubscriptionManager.xml

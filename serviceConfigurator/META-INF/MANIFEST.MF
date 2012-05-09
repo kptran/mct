@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: MCT Service Configurator
+Bundle-SymbolicName: gov.nasa.arc.mct.services.config
+Bundle-Version: 1.1.0
+Bundle-Vendor: NASA Ames Research Center, MCT Project
+Bundle-Activator: gov.nasa.arc.mct.services.config.impl.Activator
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.osgi.framework;version="1.5.0",
+ org.osgi.service.cm;version="1.2.1",
+ org.osgi.util.tracker;version="1.4.2",
+ org.slf4j;version="1.5.0",
+ org.slf4j.spi;version="1.5.0"

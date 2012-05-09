@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<scr:component name="gov.nasa.arc.mct.limits.LimitLineComponentProvider">
+		<implementation class="gov.nasa.arc.mct.limits.LimitLineComponentProvider"/>
+		<service>
+			<provide interface="gov.nasa.arc.mct.services.component.ComponentProvider"/>
+		</service>
+	</scr:component>
+	
+	<scr:component name="gov.nasa.arc.mct.limits.data.LimitDataProvider" 
+				   immediate="true">
+		<implementation class="gov.nasa.arc.mct.limits.data.LimitDataProvider"/>
+		<service>
+			<provide interface="gov.nasa.arc.mct.api.feed.DataProvider"/>
+		</service>
+	</scr:component>
+	
+	<scr:component name="gov.nasa.arc.mct.limits.data.LimitEventProvider">
+		<implementation class="gov.nasa.arc.mct.limits.data.LimitEventProvider"/>
+		<service>
+			<provide interface="gov.nasa.arc.mct.event.services.EventProvider"/> 
+		</service>
+		<reference 
+			interface="gov.nasa.arc.mct.api.feed.DataProvider"
+			bind="setDataProvider"
+			unbind="releaseDataProvider"
+			cardinality="1..n"
+			policy="static"/>
+	</scr:component>
+	
+		<scr:component name="limits.ComponentRegistryAccess">
+		<implementation class="gov.nasa.arc.mct.limits.ComponentRegistryAccess"/>
+		<reference name="componentRegistryAccess"
+			interface="gov.nasa.arc.mct.services.component.ComponentRegistry"
+			bind="setRegistry"
+			unbind="releaseRegistry"
+			cardinality="1..1"
+			policy="dynamic"/>
+	</scr:component>
+	
+</root>

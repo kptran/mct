@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+
+  <class name="gov.nasa.arc.mct.dao.specifications.ComponentSpecification" table="component_spec">
+    <!--  <cache usage="transactional"/> -->
+    <id name="componentId" column="component_id" type="java.lang.String">
+    </id>
+    <version name="version" access="field" column="obj_version"/>
+    <property name="name" column="component_name" type="java.lang.String"/>
+    <property name="externalKey" column="external_key" type="java.lang.String"/>
+    <property name="componentType" column="component_type" type="java.lang.String"/>
+    <property name="shared" column="shared" type="java.lang.Boolean"/>
+    <property name="modelState" column="model_info" type="text" />
+    <property name="owner" column="owner" type="java.lang.String" />
+    <property name="creator" column="creator_user_id" type="java.lang.String" update="false" />
+    <property name="creationDate" column="date_created" type="java.util.Date" update="false" />
+    
+    <list name="associatedComponents" table="component_relationship" cascade="save-update,refresh">
+        <key column="component_id" not-null="true" />
+        <list-index column="seq_no" /> 
+        <many-to-many column="associated_component_id" where="deleted = 0" class="gov.nasa.arc.mct.dao.specifications.ComponentSpecification"/>
+    </list>
+    <set name="parentComponents" table="component_relationship" inverse="true" optimistic-lock="false">
+        <key column="associated_component_id" not-null="true" />
+        <many-to-many column="component_id" class="gov.nasa.arc.mct.dao.specifications.ComponentSpecification"/>
+    </set>
+    <map name="viewStates" table="view_state" lazy="false"   cascade="save-update,delete-orphan">
+		<key column="component_id"/>
+		<map-key type="java.lang.String" column="view_type" />
+		<element type="text" column="view_info" />
+	</map>
+	<map name="tags" table="tag_association" lazy="true" cascade="save-update, delete-orphan">
+		<key column="component_id"/>
+		<map-key type="java.lang.String" column="tag_id" />
+		<element type="java.lang.String" column="tag_property" />
+	</map>
+	<property name="deleted" column="deleted" type="java.lang.Boolean" />
+  </class>
+</hibernate-mapping>
+ 

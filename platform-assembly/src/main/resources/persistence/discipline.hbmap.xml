@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+  <class name="gov.nasa.arc.mct.dao.specifications.Discipline" table="disciplines" lazy="true">
+    <!--  <cache usage="transactional"/> -->
+    <id name="disciplineId" column="discipline_id" type="java.lang.String">
+    </id>
+    <version name="version" access="field" column="obj_version"/>
+    <property name="description" column="description" type="java.lang.String"/>
+    <property name="program" column="program" type="java.lang.String"/>
+    
+    <set name="users" inverse="true">
+        <key column="discipline_id" 
+            not-null="true"/>
+        <one-to-many class="gov.nasa.arc.mct.dao.specifications.MCTUser"/>
+    </set>
+  </class>
+</hibernate-mapping>
+ 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="Coverage Violation Checker" default="generate-report" basedir="../../..">
+
+	<property name="project.build.directory" location="target" />
+	<property name="build.resources.directory" location="src/build/resources" />
+	
+	<target name="generate-report"
+		description="Generate a report of coverage violations"
+		depends="coverage-report,report-skipped" />
+
+	<target name="init">
+		<available property="coverage.available"
+			file="${project.build.directory}/site/clover/clover.xml" />
+	</target>
+	
+	<target name="coverage-summary"
+		depends="init"
+		if="coverage.available">
+		<xslt in="${project.build.directory}/site/clover/clover.xml"
+		    out="${project.build.directory}/coverage-summary.xml"
+		    style="${build.resources.directory}/get-coverage.xslt" />
+	</target>
+		
+	<target name="coverage-report"
+		depends="coverage-summary"
+		if="coverage.available">
+		<xslt in="${project.build.directory}/coverage-summary.xml"
+		    out="${project.build.directory}/coverage-violations.html"
+		    style="${build.resources.directory}/test-coverage.xslt" />
+		<resourcecount property="coverage.violations">
+			<tokens>
+				<concat>
+					<filelist dir="${project.build.directory}" files="coverage-violations.html" />
+					<filterchain>
+						<linecontains>
+							<contains value='class="violation"' />
+						</linecontains>
+					</filterchain>
+				</concat>
+			</tokens>
+		</resourcecount>
+		<echo message="Number of coverage violations: ${coverage.violations}" />
+		<echo message="See ${project.build.directory}/coverage-violations.html for details" />
+	</target>
+	
+	<target name="report-skipped" unless="coverage.available">
+		<echo message="No coverage report available; coverage violation report skipped." />
+	</target>
+		
+</project>

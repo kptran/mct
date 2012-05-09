@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry excluding="M2_REPO/batik/batik-awt-util/1.6/|M2_REPO/batik/batik-bridge/1.6/|M2_REPO/batik/batik-css/1.6/|M2_REPO/batik/batik-dom/1.6/|M2_REPO/batik/batik-ext/1.6/|M2_REPO/batik/batik-gvt/1.6/|M2_REPO/batik/batik-parser/1.6/|M2_REPO/batik/batik-script/1.6/|M2_REPO/batik/batik-svg-dom/1.6/|M2_REPO/batik/batik-swing/1.6/|M2_REPO/batik/batik-util/1.6/|M2_REPO/batik/batik-xml/1.6/|M2_REPO/xerces/xercesImpl/2.5.0/" including="META-INF/" kind="src" path=""/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/xerces/xercesImpl/2.5.0"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-svg-dom/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-css/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-util/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-ext/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-dom/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-script/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-xml/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-bridge/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-gvt/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-awt-util/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-parser/1.6"/>
+	<classpathentry including="*.jar" kind="src" path="M2_REPO/batik/batik-swing/1.6"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-awt-util/1.6/batik-awt-util-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-bridge/1.6/batik-bridge-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-css/1.6/batik-css-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-dom/1.6/batik-dom-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-ext/1.6/batik-ext-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-gvt/1.6/batik-gvt-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-parser/1.6/batik-parser-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-script/1.6/batik-script-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-svg-dom/1.6/batik-svg-dom-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-swing/1.6/batik-swing-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-util/1.6/batik-util-1.6.jar"/>
+	<classpathentry kind="lib" path="M2_REPO/batik/batik-xml/1.6/batik-xml-1.6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

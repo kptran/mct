@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+
+  <class name="gov.nasa.arc.mct.dao.specifications.Tag" table="tag">
+    <!--  <cache usage="transactional"/> -->
+    <id name="tagId" column="tag_id" type="java.lang.String">
+    </id>
+    <version name="version" access="field" column="obj_version"/>
+    
+    <set name="tagInfos" table="tag_association" cascade="save-update,delete,refresh">
+        <key column="tag_id" not-null="true" />
+        <one-to-many class="gov.nasa.arc.mct.dao.specifications.TagInfo"/>
+    </set>
+    <property name="tagProperty" column="tag_property" type="java.lang.String"/>  
+  </class>
+</hibernate-mapping>

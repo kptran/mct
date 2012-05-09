@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<scr:component name="gov.nasa.arc.mct.evaluator.Provider">
+		<implementation
+			class="gov.nasa.arc.mct.evaluator.component.EvaluatorComponentProvider" />
+		<service>
+			<provide interface="gov.nasa.arc.mct.services.component.ComponentProvider" />
+		</service>
+	</scr:component>
+	<scr:component name="gov.nasa.arc.mct.evaluator.enums.EnumExecutor">
+		<implementation class="gov.nasa.arc.mct.evaluator.enums.EnumEvaluator" />
+		<service>
+			<provide interface="gov.nasa.arc.mct.evaluator.spi.EvaluatorProvider" />
+		</service>
+	</scr:component>
+	<scr:component
+		name="gov.nasa.arc.mct.evaluator.component.EvaluatorCreationServiceImpl" immediate="true">
+		<implementation
+			class="gov.nasa.arc.mct.evaluator.component.EvaluatorCreationServiceImpl" />
+		<service>
+			<provide interface="gov.nasa.arc.mct.evaluator.api.EvaluatorCreationService" />
+		</service>
+		<reference bind="setComponentRegistry" cardinality="1..1"
+			interface="gov.nasa.arc.mct.services.component.ComponentRegistry"
+			name="ComponentRegistry" policy="static" unbind="removeComponentRegistry" />
+	</scr:component>
+	<scr:component
+		name="gov.nasa.arc.mct.evaluator.component.EvaluatorProviderRegistry">
+		<implementation
+			class="gov.nasa.arc.mct.evaluator.component.EvaluatorProviderRegistry" />
+		<reference name="evaluatorProvider"
+			interface="gov.nasa.arc.mct.evaluator.spi.EvaluatorProvider"
+			cardinality="0..n" policy="dynamic" bind="addProvider" unbind="removeProvider" />
+	</scr:component>
+</root>

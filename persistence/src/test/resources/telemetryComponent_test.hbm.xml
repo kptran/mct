@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+  <class name="gov.nasa.arc.mct.telemetry.persistence.dao.TelemetryComponentTest" table="telemetry_components">
+    <!-- <cache usage="transactional"/> -->
+    <id name="componentId" column="component_id" type="java.lang.String">
+    </id>
+    <property name="name" column="component_name" type="java.lang.String"/>
+    <property name="componentType" column="component_type" type="java.lang.String"/>
+    <many-to-one name="parentComponent" class="gov.nasa.arc.mct.telemetry.persistence.dao.TelemetryComponentTest" column="parent_component_id"></many-to-one>
+    <set name="childComponents" inverse="true">
+        <key column="parent_component_id" 
+            not-null="true"/>
+        <one-to-many class="gov.nasa.arc.mct.telemetry.persistence.dao.TelemetryComponentTest"/>
+    </set>
+    
+  </class>
+</hibernate-mapping>
+ 

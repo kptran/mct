@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="CanvasComponentProvider">
+	<implementation class="gov.nasa.arc.mct.canvas.provider.CanvasComponentProvider"/>
+	<service>
+		<provide interface="gov.nasa.arc.mct.services.component.ComponentProvider"/>
+	</service>
+</component>

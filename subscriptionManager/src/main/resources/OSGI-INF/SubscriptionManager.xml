@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="gov.nasa.arc.mct.platform.spi.SubscriptionManager">
+  <implementation class="gov.nasa.arc.mct.subscribe.manager.SubscriptionManagerService" />
+  <reference
+    name="log"
+  	interface="org.osgi.service.log.LogService"
+  	cardinality="1..1"
+  	policy="dynamic"
+  	bind="setLogger"
+  	unbind="unsetLogger" />
+  <reference
+    name="eventProvider"
+  	interface="gov.nasa.arc.mct.event.services.EventProvider"
+  	cardinality="0..n"
+  	policy="dynamic"
+  	bind="addProvider"
+  	unbind="removeProvider" />
+  <service>
+		<provide interface="gov.nasa.arc.mct.platform.spi.SubscriptionManager"/>
+</service>
+</component>

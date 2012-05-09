@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+
+  <class name="gov.nasa.arc.mct.dao.specifications.DatabaseIdentification" table="database_identification" >
+    <id name="name" column="name" type="java.lang.String" />
+    <version name="version" access="field" column="obj_version"/>
+    <property name="value" column="value" type="java.lang.String"/>
+  </class>
+
+</hibernate-mapping>
+    

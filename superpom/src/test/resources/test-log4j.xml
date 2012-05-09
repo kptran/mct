@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <appender name="console" class="org.apache.log4j.ConsoleAppender">
+    <param name="Threshold" value="warn" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <!-- Note: %F=file and %L=line are expensive to produce, since Log4J has to create
+           an exception and then a stack trace to find the originating file and line.
+           We should either remove this info or change to something less expensive such
+           as "%c{1}" before Module 1 release. -->
+      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%p] %m (%F:%L)%n" />
+    </layout>
+  </appender>
+
+  <!-- We specify the root logger level as "all" so that we can control
+       in the appenders which messages go where. -->
+  <root>
+    <level value ="all" />
+    <appender-ref ref="console" />
+  </root>
+  
+</log4j:configuration>

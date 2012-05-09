@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:derby:target/mct;create=true</property>
+    <property name="connection.username">asi</property>
+    <property name="connection.password">asi</property>
+    <property name="connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>
+    <property name="connection.autocommit">false</property> 
+    <property name="transaction.auto_close_session">false</property>
+    <property name="connection.isolation">4</property>
+    <property name="dialect">org.hibernate.dialect.DerbyDialect</property>
+    <property name="show_sql">false</property>
+
+    <property name="format_sql">true</property>
+    <!-- Drop and re-create the database schema on startup -->
+    <property name="hbm2ddl.auto">update</property>
+
+    <!-- JDBC connection pool (use the built-in) -->
+    <property name="connection.pool_size">2</property>
+    
+    <!--  2nd level cache provider -->
+    <!-- 
+    <property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+    -->
+    <property name="hibernate.c3p0.max_size">3</property>           <!-- c3p0 maxPoolSize -->
+    
+
+    <!-- mapping tables -->
+    <mapping resource="persistence/discipline.hbmap.xml" />
+    <mapping resource="persistence/mct_user.hbmap.xml" />
+    <mapping resource="persistence/component_spec.hbmap.xml" />
+    <mapping resource="persistence/tag.hbmap.xml"/>        
+    <mapping resource="persistence/tag_info.hbmap.xml"/>
+  </session-factory>
+</hibernate-configuration>
+ 

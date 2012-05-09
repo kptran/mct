@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Dynamic Graphics Extension
+Bundle-SymbolicName: dynamicGraphics
+Bundle-Version: 1.1.0
+Import-Package: gov.nasa.arc.mct.api.feed;version="1.1.0",
+ gov.nasa.arc.mct.components;version="1.1.0",
+ gov.nasa.arc.mct.gui;version="1.1.0",
+ gov.nasa.arc.mct.evaluator.api;version="1.1.0",
+ gov.nasa.arc.mct.policy;version="1.1.0",
+ gov.nasa.arc.mct.roles;version="1.1.0",
+ gov.nasa.arc.mct.roles.events;version="1.1.0",
+ gov.nasa.arc.mct.services.component;version="1.1.0",
+ org.apache.batik.bridge,
+ org.apache.batik.gvt,
+ org.apache.batik.gvt.renderer,
+ org.apache.batik.swing.gvt,
+ org.apache.batik.swing.svg,
+ org.w3c.dom.svg,
+ org.osgi.framework;version="1.4.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Service-Component: OSGI-INF/services.xml

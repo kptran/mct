@@ -1,0 +1,79 @@
+-- The "values" line below must be on one line so the revision can be
+-- determined automatically during the build.
+-- insert into database_identification(name,value)
+-- values ('stored_procedures_id', '$Revision: 5354 $') !!
+
+drop procedure if exists showTelemetryMetaUnderComponent
+!!
+drop procedure if exists showTelemetryMetaUnderTaxonomy
+!!
+
+create procedure showTelemetryMetaUnderComponent(in opt int, in reconID varchar(200), in target int, in max_results int,
+                                                                        in puipattern varchar(200),
+                                                                        in opspattern varchar(200))
+  begin
+    declare size int;
+    declare pop_id int;
+    declare num_visited int;
+    declare isTaxonomy int;
+    set sql_log_bin = 0;
+    SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+ 
+    set @max_results = max_results;
+    
+    drop temporary table if exists norep_visited_comps, norep_comp_stack, norep_pui_results, norep_filtered_pui_results, norep_logs;
+    create temporary table norep_visited_comps (id int) engine=memory;
+    create temporary table norep_comp_stack (id int) engine=memory;
+    create temporary table norep_pui_results (id int) engine=memory;
+    create temporary table norep_filtered_pui_results (id int) engine=memory;
+    create temporary table norep_logs (log varchar(512)) engine=memory;
+
+    insert into norep_comp_stack (id) values (target);
+    select count(*) into size from norep_comp_stack;
+    while size > 0 do
+      select id into pop_id from norep_comp_stack limit 1;
+      delete from norep_comp_stack where id = pop_id;
+      
+      select count(*) into num_visited from norep_visited_comps vc where vc.id=pop_id;
+                  
+      if num_visited = 0 then
+        select count(*) into isTaxonomy from component_property p 
+        where p.component_id=target and p.property_key='taxonomy_path' and p.property_value!='/Disciplines';
+
+        if (isTaxonomy > 0) then
+          insert into norep_pui_results(id)
+          select c2.component_id from component_spec c2 join component_spec c1 
+          join component_relationship r join component_property p1 join component_property p2 
+          join component_property p3 on c1.component_id=target and c1.component_id=p1.component_id and c2.component_id=r.associated_component_id 
+          and r.component_id=p2.component_id and p1.property_key='taxonomy_path' and p2.property_value like concat(p1.property_value, '%') 
+          and c2.component_type='gov.nasa.arc.mct.components.telemetry.TelemetryElementComponent' 
+          and c2.component_id=p3.component_id and c2.component_name like puipattern and p3.property_key like 'OPS_NAME|%' and p3.property_value like opspattern;
+        else
+          insert into norep_pui_results(id) select c.component_id from component_spec c join component_property p 
+          on c.component_type='gov.nasa.arc.mct.components.telemetry.TelemetryElementComponent' 
+          and c.component_id=pop_id and c.component_name like puipattern and c.component_id=p.component_id and p.property_key like 'OPS_NAME|%'
+          and p.property_value like opspattern;
+
+          insert into norep_comp_stack (id) select r.associated_component_id from component_relationship r where r.component_id = pop_id;
+        end if;
+        
+        insert into norep_visited_comps (id) values (pop_id);
+      end if;
+      
+      select count(*) into size from norep_comp_stack;        
+    end while;
+    
+    insert into norep_filtered_pui_results(id) select distinct r.* from norep_pui_results r;
+    
+    if opt = 0 then
+      prepare statement from "select c.* from component_spec c join norep_filtered_pui_results fr on c.component_id=fr.id limit ?";
+      execute statement using @max_results;
+    else 
+      select count(*) from norep_filtered_pui_results;
+    end if;
+    
+    drop temporary table norep_comp_stack;
+    drop temporary table norep_pui_results;
+    SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+    set sql_log_bin = 1;
+  end !!

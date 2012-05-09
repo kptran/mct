@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<service-configuration>
+  <service pid="gov.nasa.arc.mct.extsvsmgr.adapter.isp">
+    <properties>
+ 	  <property name="startLimit" value="10" />
+ 	  <property name="host" value="otf3.somewhere.someplace.gov" />
+ 	  <property name="port" value="3500" />
+      <property name="color.default" value="white" />
+      <property name="color.1" value="white" />
+      <property name="color.2" value="red" />
+      <property name="color.8" value="yellow" />
+      <property name="color.19" value="cyan" />
+      <property name="color.29" value="purple" />
+    </properties>
+  </service>
+</service-configuration>

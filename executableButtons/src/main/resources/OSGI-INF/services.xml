@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+	<scr:component name="gov.nasa.jsc.mct.executable.buttons.ExecutableButtonComponentProvider">
+		<implementation class="gov.nasa.jsc.mct.executable.buttons.ExecutableButtonComponentProvider"/>
+		<service>
+			<provide interface="gov.nasa.arc.mct.services.component.ComponentProvider"/>
+		</service>
+		<reference 
+			interface="gov.nasa.arc.mct.platform.spi.RoleService"
+			bind="setRoleService"
+			unbind="releaseRoleService"
+			cardinality="1..1"
+			policy="dynamic"/>
+	</scr:component>
+</root>
